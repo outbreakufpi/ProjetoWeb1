@@ -29,7 +29,7 @@ Um sistema completo para gerenciamento de barbearia, desenvolvido com Node.js, E
 
 1. Clone este repositório:
 ```bash
-git clone [https://github.com/outbreakufpi/ProjetoWeb1]
+git clone https://github.com/outbreakufpi/ProjetoWeb1
 ```
 
 2. Instale as dependências:
