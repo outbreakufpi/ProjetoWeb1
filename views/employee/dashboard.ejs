@@ -1,0 +1,80 @@
+<%- contentFor('body') %>
+
+<div class="row">
+    <div class="col-md-12 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h2 class="card-title">Dashboard do Funcionário</h2>
+                <p class="card-text">Bem-vindo, <%= user.nome %>!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3 class="card-title mb-0">Meus Agendamentos</h3>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Cliente</th>
+                                <th>Serviço</th>
+                                <th>Data</th>
+                                <th>Hora</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (agendamentos.length === 0) { %>
+                                <tr>
+                                    <td colspan="6" class="text-center">Nenhum agendamento encontrado</td>
+                                </tr>
+                            <% } else { %>
+                                <% agendamentos.forEach(agendamento => { %>
+                                    <tr>
+                                        <td><%= agendamento.cliente_nome %></td>
+                                        <td><%= agendamento.servico_nome %></td>
+                                        <td><%= new Date(agendamento.data).toLocaleDateString() %></td>
+                                        <td><%= agendamento.hora %></td>
+                                        <td>
+                                            <span class="badge bg-<%= agendamento.status === 'confirmado' ? 'success' : 
+                                                                        agendamento.status === 'pendente' ? 'warning' : 
+                                                                        agendamento.status === 'cancelado' ? 'danger' : 'info' %>">
+                                                <%= agendamento.status %>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <% if (agendamento.status === 'pendente') { %>
+                                                    <form action="/funcionario/agendamento/<%= agendamento.id %>/confirmar" method="POST" class="d-inline">
+                                                        <button type="submit" class="btn btn-sm btn-success" title="Confirmar">
+                                                            <i class="fas fa-check"></i>
+                                                        </button>
+                                                    </form>
+                                                <% } %>
+                                                <% if (agendamento.status === 'pendente' || agendamento.status === 'confirmado') { %>
+                                                    <form action="/funcionario/agendamento/<%= agendamento.id %>/cancelar" method="POST" class="d-inline">
+                                                        <button type="submit" class="btn btn-sm btn-danger" title="Cancelar">
+                                                            <i class="fas fa-times"></i>
+                                                        </button>
+                                                    </form>
+                                                <% } %>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

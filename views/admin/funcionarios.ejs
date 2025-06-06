@@ -1,0 +1,138 @@
+<%- contentFor('body') %>
+
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1>Gerenciamento de Funcionários</h1>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#novoFuncionarioModal">
+                <i class="fas fa-plus"></i> Novo Funcionário
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Lista de Funcionários -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Foto</th>
+                                <th>Nome</th>
+                                <th>Email</th>
+                                <th>Telefone</th>
+                                <th>CPF</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (funcionarios.length === 0) { %>
+                                <tr>
+                                    <td colspan="6" class="text-center">Nenhum funcionário cadastrado</td>
+                                </tr>
+                            <% } else { %>
+                                <% funcionarios.forEach(funcionario => { %>
+                                    <tr>
+                                        <td>
+                                            <% if (funcionario.foto) { %>
+                                                <img src="<%= funcionario.foto %>" alt="<%= funcionario.nome %>" class="rounded-circle" width="40" height="40">
+                                            <% } else { %>
+                                                <i class="fas fa-user-circle fa-2x"></i>
+                                            <% } %>
+                                        </td>
+                                        <td><%= funcionario.nome %></td>
+                                        <td><%= funcionario.email %></td>
+                                        <td><%= funcionario.telefone || '-' %></td>
+                                        <td><%= funcionario.cpf || '-' %></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-info" onclick="editarFuncionario(<%= JSON.stringify(funcionario) %>)">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-danger" onclick="excluirFuncionario(<%= funcionario.id %>)">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Novo Funcionário -->
+<div class="modal fade" id="novoFuncionarioModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Novo Funcionário</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="/admin/funcionarios" method="POST" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="nome" class="form-label">Nome</label>
+                        <input type="text" class="form-control" id="nome" name="nome" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="senha" class="form-label">Senha</label>
+                        <input type="password" class="form-control" id="senha" name="senha" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="cpf" class="form-label">CPF</label>
+                        <input type="text" class="form-control" id="cpf" name="cpf">
+                    </div>
+                    <div class="mb-3">
+                        <label for="telefone" class="form-label">Telefone</label>
+                        <input type="tel" class="form-control" id="telefone" name="telefone">
+                    </div>
+                    <div class="mb-3">
+                        <label for="endereco" class="form-label">Endereço</label>
+                        <textarea class="form-control" id="endereco" name="endereco" rows="2"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="foto" class="form-label">Foto</label>
+                        <input type="file" class="form-control" id="foto" name="foto" accept="image/*">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<%- contentFor('script') %>
+<script>
+function editarFuncionario(funcionario) {
+    // Implementar edição
+    console.log('Editar funcionário:', funcionario);
+}
+
+function excluirFuncionario(id) {
+    if (confirm('Tem certeza que deseja excluir este funcionário?')) {
+        fetch(`/admin/funcionarios/${id}`, {
+            method: 'DELETE'
+        }).then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                window.location.reload();
+            } else {
+                alert('Erro ao excluir funcionário');
+            }
+        });
+    }
+}
+</script> 

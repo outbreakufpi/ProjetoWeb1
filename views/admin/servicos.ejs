@@ -1,0 +1,159 @@
+<%- contentFor('body') %>
+
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1>Gerenciamento de Serviços</h1>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#novoServicoModal">
+                <i class="fas fa-plus"></i> Novo Serviço
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Lista de Serviços -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Descrição</th>
+                                <th>Duração (min)</th>
+                                <th>Preço (R$)</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (servicos.length === 0) { %>
+                                <tr>
+                                    <td colspan="5" class="text-center">Nenhum serviço cadastrado</td>
+                                </tr>
+                            <% } else { %>
+                                <% servicos.forEach(servico => { %>
+                                    <% let precoFormatado = '0.00'; %>
+                                    <% if (servico.preco && !isNaN(servico.preco)) { precoFormatado = Number(servico.preco).toFixed(2); } %>
+                                    <tr>
+                                        <td><%= servico.nome %></td>
+                                        <td><%= servico.descricao %></td>
+                                        <td><%= servico.duracao %></td>
+                                        <td>R$ <%= precoFormatado %></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-info" onclick="editarServico(<%= JSON.stringify(servico) %>)">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-danger" onclick="excluirServico(<%= servico.id %>)">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Novo Serviço -->
+<div class="modal fade" id="novoServicoModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Novo Serviço</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="/admin/servicos" method="POST">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="nome" class="form-label">Nome</label>
+                        <input type="text" class="form-control" id="nome" name="nome" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="descricao" class="form-label">Descrição</label>
+                        <textarea class="form-control" id="descricao" name="descricao" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="duracao" class="form-label">Duração (minutos)</label>
+                        <input type="number" class="form-control" id="duracao" name="duracao" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="preco" class="form-label">Preço (R$)</label>
+                        <input type="number" class="form-control" id="preco" name="preco" step="0.01" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Editar Serviço -->
+<div class="modal fade" id="editarServicoModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Editar Serviço</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="formEditarServico" method="POST">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="editNome" class="form-label">Nome do Serviço</label>
+                        <input type="text" class="form-control" id="editNome" name="nome" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editDescricao" class="form-label">Descrição</label>
+                        <textarea class="form-control" id="editDescricao" name="descricao" rows="3"></textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="editDuracao" class="form-label">Duração (minutos)</label>
+                            <input type="number" class="form-control" id="editDuracao" name="duracao" required min="1">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="editPreco" class="form-label">Preço (R$)</label>
+                            <input type="number" class="form-control" id="editPreco" name="preco" required min="0" step="0.01">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<%- contentFor('script') %>
+<script>
+function editarServico(servico) {
+    document.getElementById('editNome').value = servico.nome;
+    document.getElementById('editDescricao').value = servico.descricao;
+    document.getElementById('editDuracao').value = servico.duracao;
+    document.getElementById('editPreco').value = servico.preco;
+    
+    document.getElementById('formEditarServico').action = `/admin/servicos/${servico.id}`;
+    
+    new bootstrap.Modal(document.getElementById('editarServicoModal')).show();
+}
+
+function excluirServico(id) {
+    if (confirm('Tem certeza que deseja excluir este serviço?')) {
+        fetch(`/admin/servicos/${id}`, {
+            method: 'DELETE'
+        }).then(() => {
+            window.location.reload();
+        });
+    }
+}
+</script> 

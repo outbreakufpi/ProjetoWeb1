@@ -1,0 +1,70 @@
+<div class="row">
+    <div class="col-md-12 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h2 class="card-title mb-4">Gerenciar Agendamentos</h2>
+
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Cliente</th>
+                                <th>Barbeiro</th>
+                                <th>Serviço</th>
+                                <th>Data</th>
+                                <th>Hora</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% agendamentos.forEach(agendamento => { %>
+                                <tr>
+                                    <td><%= agendamento.cliente_nome %></td>
+                                    <td><%= agendamento.funcionario_nome %></td>
+                                    <td><%= agendamento.servico_nome %></td>
+                                    <td><%= new Date(agendamento.data).toLocaleDateString() %></td>
+                                    <td><%= agendamento.hora %></td>
+                                    <td>
+                                        <span class="badge bg-<%= agendamento.status === 'confirmado' ? 'success' : 
+                                                                    agendamento.status === 'pendente' ? 'warning' : 
+                                                                    agendamento.status === 'cancelado' ? 'danger' : 'info' %>">
+                                            <%= agendamento.status %>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                                Ações
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <form action="/admin/agendamentos/<%= agendamento.id %>/status" method="POST" class="d-inline">
+                                                        <input type="hidden" name="status" value="confirmado">
+                                                        <button type="submit" class="dropdown-item">Confirmar</button>
+                                                    </form>
+                                                </li>
+                                                <li>
+                                                    <form action="/admin/agendamentos/<%= agendamento.id %>/status" method="POST" class="d-inline">
+                                                        <input type="hidden" name="status" value="concluido">
+                                                        <button type="submit" class="dropdown-item">Concluir</button>
+                                                    </form>
+                                                </li>
+                                                <li>
+                                                    <form action="/admin/agendamentos/<%= agendamento.id %>/status" method="POST" class="d-inline">
+                                                        <input type="hidden" name="status" value="cancelado">
+                                                        <button type="submit" class="dropdown-item text-danger">Cancelar</button>
+                                                    </form>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

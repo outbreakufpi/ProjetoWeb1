@@ -1,0 +1,87 @@
+<%- include('../layouts/main') %>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h2 class="card-title mb-4">Editar Agendamento</h2>
+                <form action="/employee/agendamento/<%= agendamento.id %>/editar" method="POST">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="clienteId" class="form-label">Cliente</label>
+                            <select class="form-select" id="clienteId" name="clienteId" required>
+                                <option value="">Selecione um cliente</option>
+                                <% clientes.forEach(cliente => { %>
+                                    <option value="<%= cliente.id %>" <%= cliente.id === agendamento.clienteId ? 'selected' : '' %>>
+                                        <%= cliente.nome %>
+                                    </option>
+                                <% }); %>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="servicoId" class="form-label">Serviço</label>
+                            <select class="form-select" id="servicoId" name="servicoId" required>
+                                <option value="">Selecione um serviço</option>
+                                <% servicos.forEach(servico => { %>
+                                    <option value="<%= servico.id %>" 
+                                            data-duracao="<%= servico.duracao %>"
+                                            <%= servico.id === agendamento.servicoId ? 'selected' : '' %>>
+                                        <%= servico.nome %> - R$ <%= servico.preco.toFixed(2) %> (<%= servico.duracao %> min)
+                                    </option>
+                                <% }); %>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="data" class="form-label">Data</label>
+                            <input type="date" class="form-control" id="data" name="data" 
+                                   value="<%= agendamento.data %>" required 
+                                   min="<%= new Date().toISOString().split('T')[0] %>">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="hora" class="form-label">Hora</label>
+                            <input type="time" class="form-control" id="hora" name="hora" 
+                                   value="<%= agendamento.hora %>" required 
+                                   min="08:00" max="18:00">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="observacao" class="form-label">Observação</label>
+                        <textarea class="form-control" id="observacao" name="observacao" rows="3"><%= agendamento.observacao %></textarea>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                        <a href="/employee/dashboard" class="btn btn-secondary">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('data').addEventListener('change', function() {
+    const data = new Date(this.value);
+    const hoje = new Date();
+    
+    if (data < hoje) {
+        alert('Não é possível agendar para uma data passada');
+        this.value = '';
+    }
+});
+
+document.getElementById('hora').addEventListener('change', function() {
+    const hora = this.value;
+    const horaAlmocoInicio = '12:00';
+    const horaAlmocoFim = '13:00';
+    
+    if (hora >= horaAlmocoInicio && hora <= horaAlmocoFim) {
+        alert('Não é possível agendar durante o horário de almoço (12:00 às 13:00)');
+        this.value = '';
+    }
+});
+</script> 

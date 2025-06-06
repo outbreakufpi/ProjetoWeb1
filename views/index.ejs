@@ -1,0 +1,140 @@
+<!-- Hero Section -->
+<div class="jumbotron text-center py-5">
+    <div class="container">
+        <h1 class="display-4 fw-bold mb-4">Bem-vindo à Barbearia</h1>
+        <p class="lead mb-4">Agende seu horário de forma rápida e fácil</p>
+        <% if (!user) { %>
+            <div class="mt-4">
+                <a href="/auth/register" class="btn btn-primary btn-lg me-3">
+                    <i class="fas fa-user-plus me-2"></i>Registrar
+                </a>
+                <a href="/auth/login" class="btn btn-outline-light btn-lg">
+                    <i class="fas fa-sign-in-alt me-2"></i>Entrar
+                </a>
+            </div>
+        <% } else { %>
+            <div class="mt-4">
+                <% if (user.tipo === 'admin') { %>
+                    <a href="/admin/dashboard" class="btn btn-primary btn-lg">
+                        <i class="fas fa-tachometer-alt me-2"></i>Dashboard Administrativo
+                    </a>
+                <% } else if (user.tipo === 'funcionario') { %>
+                    <a href="/funcionario/dashboard" class="btn btn-primary btn-lg">
+                        <i class="fas fa-user-tie me-2"></i>Dashboard do Funcionário
+                    </a>
+                <% } else { %>
+                    <a href="/cliente/dashboard" class="btn btn-primary btn-lg">
+                        <i class="fas fa-calendar-alt me-2"></i>Meus Agendamentos
+                    </a>
+                <% } %>
+            </div>
+        <% } %>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="container py-5">
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card h-100 border-0">
+                <div class="card-body text-center p-4">
+                    <i class="fas fa-calendar-check fa-3x mb-4 text-primary"></i>
+                    <h5 class="card-title fw-bold">Agendamento Online</h5>
+                    <p class="card-text text-muted">Agende seu horário de forma rápida e fácil, 24 horas por dia.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0">
+                <div class="card-body text-center p-4">
+                    <i class="fas fa-cut fa-3x mb-4 text-primary"></i>
+                    <h5 class="card-title fw-bold">Profissionais Qualificados</h5>
+                    <p class="card-text text-muted">Nossa equipe é formada por profissionais experientes e qualificados.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0">
+                <div class="card-body text-center p-4">
+                    <i class="fas fa-star fa-3x mb-4 text-primary"></i>
+                    <h5 class="card-title fw-bold">Qualidade Garantida</h5>
+                    <p class="card-text text-muted">Satisfação garantida com nossos serviços de alta qualidade.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Services Section -->
+<div class="container py-5">
+    <h2 class="text-center mb-5">Nossos Serviços</h2>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card h-100 border-0">
+                <div class="card-body p-4">
+                    <h5 class="card-title fw-bold">
+                        <i class="fas fa-cut me-2 text-primary"></i>Corte de Cabelo
+                    </h5>
+                    <p class="card-text text-muted">Corte tradicional ou moderno, realizado por nossos profissionais experientes.</p>
+                    <p class="text-muted mb-0">
+                        <i class="fas fa-clock me-2"></i>Duração: 30 minutos
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0">
+                <div class="card-body p-4">
+                    <h5 class="card-title fw-bold">
+                        <i class="fas fa-razor me-2 text-primary"></i>Barba
+                    </h5>
+                    <p class="card-text text-muted">Aparar, modelar ou fazer a barba completa com toalha quente.</p>
+                    <p class="text-muted mb-0">
+                        <i class="fas fa-clock me-2"></i>Duração: 20 minutos
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0">
+                <div class="card-body p-4">
+                    <h5 class="card-title fw-bold">
+                        <i class="fas fa-gem me-2 text-primary"></i>Corte + Barba
+                    </h5>
+                    <p class="card-text text-muted">Combo completo com corte de cabelo e barba.</p>
+                    <p class="text-muted mb-0">
+                        <i class="fas fa-clock me-2"></i>Duração: 45 minutos
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Schedule Section -->
+<div class="container py-5">
+    <h2 class="text-center mb-5">Horário de Funcionamento</h2>
+    <div class="card border-0">
+        <div class="card-body p-4">
+            <div class="row text-center g-4">
+                <div class="col-md-4">
+                    <h5 class="fw-bold">Segunda a Sexta</h5>
+                    <p class="text-muted mb-0">09:00 - 19:00</p>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="fw-bold">Sábado</h5>
+                    <p class="text-muted mb-0">09:00 - 17:00</p>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="fw-bold">Domingo</h5>
+                    <p class="text-muted mb-0">Fechado</p>
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <p class="text-muted mb-0">
+                    <i class="fas fa-info-circle me-2"></i>Horário de almoço: 12:00 - 13:00
+                </p>
+            </div>
+        </div>
+    </div>
+</div> 

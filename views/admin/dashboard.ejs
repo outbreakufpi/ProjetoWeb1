@@ -1,0 +1,138 @@
+<%- contentFor('body') %>
+
+<div class="row mb-4">
+    <div class="col-md-12">
+        <h1 class="mb-4">Dashboard Administrativo</h1>
+    </div>
+</div>
+
+<!-- Cards de Estatísticas -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <h5 class="card-title">Total de Clientes</h5>
+                <h2 class="card-text"><%= totalClientes %></h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <h5 class="card-title">Total de Funcionários</h5>
+                <h2 class="card-text"><%= totalFuncionarios %></h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <h5 class="card-title">Total de Serviços</h5>
+                <h2 class="card-text"><%= totalServicos %></h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-warning text-white">
+            <div class="card-body">
+                <h5 class="card-title">Agendamentos Hoje</h5>
+                <h2 class="card-text"><%= agendamentosHoje %></h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Últimos Agendamentos -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Últimos Agendamentos</h5>
+                <a href="/admin/agendamentos" class="btn btn-primary btn-sm">Ver Todos</a>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Cliente</th>
+                                <th>Funcionário</th>
+                                <th>Serviço</th>
+                                <th>Data</th>
+                                <th>Hora</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (ultimosAgendamentos.length === 0) { %>
+                                <tr>
+                                    <td colspan="7" class="text-center">Nenhum agendamento encontrado</td>
+                                </tr>
+                            <% } else { %>
+                                <% ultimosAgendamentos.forEach(agendamento => { %>
+                                    <tr>
+                                        <td><%= agendamento.cliente_nome %></td>
+                                        <td><%= agendamento.funcionario_nome %></td>
+                                        <td><%= agendamento.servico_nome %></td>
+                                        <td><%= new Date(agendamento.data).toLocaleDateString('pt-BR') %></td>
+                                        <td><%= agendamento.hora %></td>
+                                        <td>
+                                            <span class="badge bg-<%= 
+                                                agendamento.status === 'confirmado' ? 'success' : 
+                                                agendamento.status === 'pendente' ? 'warning' : 
+                                                agendamento.status === 'cancelado' ? 'danger' : 'info' 
+                                            %>">
+                                                <%= agendamento.status.charAt(0).toUpperCase() + agendamento.status.slice(1) %>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <a href="/admin/agendamentos/<%= agendamento.id %>" class="btn btn-info btn-sm">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Links Rápidos -->
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Links Rápidos</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <a href="/admin/funcionarios" class="btn btn-outline-primary w-100">
+                            <i class="fas fa-users"></i> Gerenciar Funcionários
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <a href="/admin/servicos" class="btn btn-outline-success w-100">
+                            <i class="fas fa-cut"></i> Gerenciar Serviços
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <a href="/admin/agendamentos" class="btn btn-outline-info w-100">
+                            <i class="fas fa-calendar-alt"></i> Gerenciar Agendamentos
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <a href="/admin/relatorios" class="btn btn-outline-warning w-100">
+                            <i class="fas fa-chart-bar"></i> Relatórios
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
