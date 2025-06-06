@@ -1,4 +1,4 @@
-# Sistema de Barbearia 🪒
+# Sistema de Barbearia 
 
 Um sistema completo para gerenciamento de barbearia, desenvolvido com Node.js, Express e PostgreSQL.
 
