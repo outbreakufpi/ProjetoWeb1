@@ -41,8 +41,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Configuração da sessão
+// Session secret (use an environment variable in production)
+const SESSION_SECRET = process.env.SESSION_SECRET || 'dev_secret_change_me_please_update';
+if (!process.env.SESSION_SECRET) {
+    console.warn('WARNING: SESSION_SECRET is not set. Using an insecure default. Set SESSION_SECRET in your environment for production.');
+}
+
 app.use(session({
-    secret: process.env.SESSION_SECRET,
+    secret: SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {

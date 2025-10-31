@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const { User, Agendamento, Servico } = require('../models');
 const { checkAdmin } = require('../middleware/auth');
 const multer = require('multer');
 const path = require('path');
@@ -110,23 +109,19 @@ router.post('/funcionario/cadastrar', upload.single('foto'), async (req, res) =>
     const foto = req.file ? `/uploads/${req.file.filename}` : null;
 
     try {
-        const userExists = await User.findOne({ where: { email } });
-        
-        if (userExists) {
+        // Verificar se o email já existe
+        const existing = await db.query('SELECT id FROM usuarios WHERE email = $1', [email]);
+        if (existing.rows.length > 0) {
             req.flash('error_msg', 'Email já cadastrado');
             return res.redirect('/admin/funcionario/cadastrar');
         }
 
-        await User.create({
-            nome,
-            email,
-            senha,
-            cpf,
-            telefone,
-            endereco,
-            foto,
-            tipo: 'funcionario'
-        });
+        // Hash da senha e inserir funcionário
+        const hashed = await bcrypt.hash(senha, 10);
+        await db.query(
+            'INSERT INTO usuarios (nome, email, senha, cpf, telefone, endereco, foto, tipo) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',
+            [nome, email, hashed, cpf, telefone, endereco, foto, 'funcionario']
+        );
 
         req.flash('success_msg', 'Funcionário cadastrado com sucesso!');
         res.redirect('/admin/dashboard');

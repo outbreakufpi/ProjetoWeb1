@@ -45,15 +45,40 @@ npm install
    - Execute o arquivo (F5)
 
 4. Configure as variáveis de ambiente:
-   - Crie um arquivo `.env` na raiz do projeto
-   - Adicione as seguintes variáveis:
-```
-DB_USER=seu_usuario
-DB_PASSWORD=sua_senha
-DB_HOST=localhost
-DB_PORT=5432
-DB_DATABASE=barbearia
-```
+   - Copie o arquivo `.env.example` para `.env`:
+     ```bash
+     # Windows (PowerShell)
+     Copy-Item .env.example .env
+     
+     # Linux/Mac
+     cp .env.example .env
+     ```
+   - Edite o arquivo `.env` e configure suas credenciais:
+     ```env
+     # Database Configuration
+     DB_USER=postgres
+     DB_HOST=localhost
+     DB_NAME=barbearia
+     DB_PASSWORD=sua_senha_do_postgres_aqui
+     DB_PORT=5432
+     
+     # Session Configuration (IMPORTANTE: gere uma chave aleatória segura)
+     SESSION_SECRET=gere_uma_chave_aleatoria_segura_aqui
+     
+     # Application Configuration
+     NODE_ENV=development
+     PORT=3001
+     ```
+   
+   ⚠️ **IMPORTANTE**:
+   - `DB_PASSWORD` deve ser uma string (entre aspas se contiver caracteres especiais)
+   - `SESSION_SECRET` deve ser uma string aleatória longa (mínimo 32 caracteres)
+   - Para gerar um `SESSION_SECRET` seguro, use:
+     ```bash
+     # Node.js
+     node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+     ```
+   - **NUNCA** commit o arquivo `.env` no repositório (já está no `.gitignore`)
 
 5. Inicie o servidor:
 ```bash
